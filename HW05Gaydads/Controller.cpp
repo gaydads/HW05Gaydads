@@ -102,8 +102,8 @@ int main(int argc, char** argv) {
   srand(1);
 
   // Apply each of the Tester methods to your MatrixGraph class.
- // Tester T1(true);
-  //T1.test_all();
+  Tester T1(true);
+  T1.test_all();
 
   cout << endl;
 

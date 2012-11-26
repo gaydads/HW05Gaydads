@@ -33,7 +33,7 @@ ListGraph::~ListGraph() {
   void ListGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight){
 	  bool duplicate = false;
 	  //Preconditions...
-	  if (0 <= u < edgeList.size() && 0 <= v < edgeList.size() && u!=v) {
+	  if (0 <= u < edgeList.size() && 0 <= v < edgeList.size() && u!=v && weight >0) {
 		  //Iterate edgeList
 		  for(std::list<NWPair>::const_iterator i = edgeList.at(u).begin(); i != edgeList.at(u).end(); i++){
 			  if(i->first == v && i->second == weight){
