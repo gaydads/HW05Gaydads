@@ -8,21 +8,14 @@ MatrixGraph::MatrixGraph(unsigned num_nodes)
 
 
 	num_edges = 0;
-	//M = std::vector<std::vector<EdgeWeight>>(num_nodes, std::vector<EdgeWeight>(num_nodes));
 	M = std::vector<std::vector<EdgeWeight>>(num_nodes);
-	//M.resize(num_nodes);
 	for (int i = 0; i < num_nodes; i++) {
-		//M[i] = std::vector<EdgeWeight>(num_nodes);
 		M[i] = std::vector<EdgeWeight>(num_nodes);
-		//for (int j = 0; j < num_nodes; j++){
-			//M[i][j] = 0.0;
-		//}
 	}
-	//M[0][0] = 5;
 }
 
 MatrixGraph::~MatrixGraph(){
-
+	//Not Needed
 }
 
  /*
@@ -36,12 +29,12 @@ MatrixGraph::~MatrixGraph(){
    */
 void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight)
 {
+	//Duplicates not a problem I think...
 	  //Preconditions...
 	  if (0 <= u < M.size()   && 0 <= v < M.size() && u!=v && weight >0) {
-		  //M->weight((u), (v)) = weight;
 		 M[u][v] = weight;
 		 M[v][u] = weight;
-		  num_edges++;
+		 num_edges++;
 	  }
 }
 
@@ -70,7 +63,7 @@ EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const
 std::list<NWPair> MatrixGraph::getAdj(NodeID u) const
 {
 	//Precondition...
-	std::list<NWPair> adj_list;
+	EList adj_list;
 
 	if (u >= 0 && u < M.size()){
 		for(int i=0; i<M[u].size(); i++) {
@@ -91,6 +84,7 @@ unsigned MatrixGraph::degree(NodeID u) const{
 	if (0 <= u < M.size() ){
 		return getAdj(u).size();
 	}
+	return 0;
 }
 
 /*

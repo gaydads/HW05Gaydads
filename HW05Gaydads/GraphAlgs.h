@@ -19,5 +19,11 @@
  *     G is undirected.
  *     Every pair of nodes u,v  (u != v) has an edge connecting the of weight > 0.
  */
-
-std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G);
+class GraphAlgs {
+ public:
+	std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G);
+	void tour(std::vector<NodeID> nodes, int n, int starting_place);
+private:
+	int* bestTour;
+	float bestTourLength;
+};

@@ -14,9 +14,7 @@ ListGraph::ListGraph(int numNodes) {
 		num_edges = 0;
 }
 ListGraph::~ListGraph() {
-	for(int i = 0; i < edgeList.size(); i++){
-		  edgeList.pop_back();
-	}
+	//Not Needed
 }
 
   // Modifiers
@@ -31,19 +29,24 @@ ListGraph::~ListGraph() {
    *     weight > 0
    */
   void ListGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight){
-	  bool duplicate = false;
+	  bool isDuplicate = false;
 	  //Preconditions...
 	  if (0 <= u < edgeList.size() && 0 <= v < edgeList.size() && u!=v && weight >0) {
-		  //Iterate edgeList
-		  for(std::list<NWPair>::const_iterator i = edgeList.at(u).begin(); i != edgeList.at(u).end(); i++){
+		  //Iterate edgeList for duplicates
+		  for(EList::const_iterator i = edgeList[u].begin(); i != edgeList[u].end(); i++){
 			  if(i->first == v && i->second == weight){
-				duplicate = true;
+				isDuplicate = true;
+			  }
+		  }
+		  for(EList::const_iterator i = edgeList[v].begin(); i != edgeList[v].end(); i++){
+			  if(i->first == u && i->second == weight){
+				isDuplicate = true;
 			  }
 		  }
 		  //If there is no duplicate, add weighted edge
-		  if (!duplicate) {
-			edgeList.at(u).push_back(NWPair(v,weight));
-			edgeList.at(v).push_back(NWPair(u,weight));
+		  if (!isDuplicate) {
+			edgeList[u].push_back(NWPair(v,weight));
+			edgeList[v].push_back(NWPair(u,weight));
 			num_edges++;
 		}
 	  }
@@ -58,7 +61,8 @@ ListGraph::~ListGraph() {
    */
   EdgeWeight ListGraph::weight(NodeID u, NodeID v) const {
 	  if (0 <= u < edgeList.size() && 0 <= v < edgeList.size()) {
-		for( std::list<NWPair>::const_iterator i = edgeList.at(u).begin(); i != edgeList.at(u).end(); i++) {
+		  //This iterator loop code is modified version of the cplusplus.com example taken from 274 lecture
+		for( EList::const_iterator i = edgeList[u].begin(); i != edgeList[u].end(); i++) {
 			if (i->first == v) {
 				return i->second;
 			}
@@ -74,7 +78,7 @@ ListGraph::~ListGraph() {
    */
   std::list<NWPair> ListGraph::getAdj(NodeID u) const {
 	  if (0 <= u < edgeList.size()) {
-		  return edgeList.at(u);
+		  return edgeList[u];
 	  }
   }
   /*
