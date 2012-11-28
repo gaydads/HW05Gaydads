@@ -25,7 +25,7 @@ std::pair<std::vector<NodeID>, EdgeWeight> GraphAlgs::TSP(Graph* G) {
 
 	//std::vector<NodeID>(G.size()) nodes;
 	//EList tour;
-	std::pair<std::vector<NodeID>, EdgeWeight> ret;
+	
 	/*
 	//OK I GOT THIS TO WORK WITH...
   virtual EdgeWeight weight(NodeID u, NodeID v) const;
@@ -34,6 +34,8 @@ std::pair<std::vector<NodeID>, EdgeWeight> GraphAlgs::TSP(Graph* G) {
   virtual unsigned size() const;
   virtual unsigned numEdges() const;
 	*/
+
+	std::pair<std::vector<NodeID>, EdgeWeight> ret;
 	std::list<std::list<NWPair>> nodes;
 	for(int i=0; i<G->size(); i++) {
 		nodes.push_back(G->getAdj(i));
@@ -41,6 +43,13 @@ std::pair<std::vector<NodeID>, EdgeWeight> GraphAlgs::TSP(Graph* G) {
 	cout <<G->size()<<endl;
 	cout <<nodes.size()<<endl;
 
+	////AHHHHHHHHHH!!!! I can't think
+	double tourLength = 0;
+	for(int i=0; i<nodes.size; i++) {
+		ret->first.push_back(nodes[i]);
+		nodes[i]
+		
+	}
 
 
 	//create vector of all pairs...? i don't know....
