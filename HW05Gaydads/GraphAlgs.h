@@ -1,7 +1,6 @@
 // GraphAlgs.h
 #include "Graph.h"
 #include <vector>
-
 #pragma once
 
 
@@ -19,11 +18,8 @@
  *     G is undirected.
  *     Every pair of nodes u,v  (u != v) has an edge connecting the of weight > 0.
  */
-class GraphAlgs {
- public:
-	std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G);
-	void tour(std::vector<NodeID> nodes, int n, int starting_place);
-private:
-	int* bestTour;
-	float bestTourLength;
-};
+
+std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G);
+void tour(int* arr, int n, int startingPlace, Graph* G);
+EdgeWeight length(int* tour, Graph* G);
+void swap(int* arr, int place1, int place2);

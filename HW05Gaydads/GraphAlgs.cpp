@@ -1,11 +1,7 @@
 #include "GraphAlgs.h"
 
-//
-#include <iostream>
-//
-#pragma once
-
-using namespace std;
+int* bestTour;
+double bestTourLength;
 /*
  * Solves the Traveling Salesperson Problem: finding the shortest cycle through a graph that 
  * vists every node exactly once (with exception of the first node, which is repeated as the 
@@ -20,70 +16,57 @@ using namespace std;
  *     G is undirected.
  *     Every pair of nodes u,v  (u != v) has an edge connecting the of weight > 0.
  */
-
-std::pair<std::vector<NodeID>, EdgeWeight> GraphAlgs::TSP(Graph* G) {
-
-	//std::vector<NodeID>(G.size()) nodes;
-	//EList tour;
-	
-	/*
-	//OK I GOT THIS TO WORK WITH...
-  virtual EdgeWeight weight(NodeID u, NodeID v) const;
-  virtual std::list<NWPair> getAdj(NodeID u) const;
-  virtual unsigned degree(NodeID u) const;
-  virtual unsigned size() const;
-  virtual unsigned numEdges() const;
-	*/
-
-	std::pair<std::vector<NodeID>, EdgeWeight> ret;
-	std::list<std::list<NWPair>> nodes;
+std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G)
+{
+	bestTour = new int [G->size()];
 	for(int i=0; i<G->size(); i++) {
-		nodes.push_back(G->getAdj(i));
-	}
-	cout <<G->size()<<endl;
-	cout <<nodes.size()<<endl;
-
-	////AHHHHHHHHHH!!!! I can't think
-	double tourLength = 0;
-	for(int i=0; i<nodes.size; i++) {
-		ret->first.push_back(nodes[i]);
-		nodes[i]
-		
+		bestTour[i] = i;
 	}
 
+	bestTourLength = length(bestTour, G);
 
-	//create vector of all pairs...? i don't know....
-	/*for(int i=0; i<G.size(); i++) {
-		for(int j=0; j<G->NodeID.getAdj().size(); j++) {
-		nodes.push_back(G.getAdj(i));
-		}
+	tour(bestTour, G->size(), 0, G);
+	std::vector<NodeID> nodes (G->size());
+	for(int i =0; i<G->size(); i++) {
+		nodes[i] = bestTour[i];
 	}
-	*/
-
+	std::pair<std::vector<NodeID>,EdgeWeight> ret (nodes,bestTourLength);
 	return ret;
 }
-void GraphAlgs::tour(std::vector<NodeID> nodes, int n, int starting_place) {
-	if(n-starting_place == 1) {
-		for(int i=0; i<nodes.size(); i++) {
-			////
+
+void tour(int* arr, int n, int startingPlace, Graph* G)
+{
+	if(G->size() - startingPlace == 1) {
+		/* Sum up the length of the permutation
+		and see if it is smaller than the best seen
+		*/
+		if(length(arr,G) < length(bestTour,G)) {
+			bestTour = arr;
 		}
 	}
-
+	else {
+		for(int i=startingPlace; i<n; i++) {
+			swap(arr,arr[startingPlace],arr[i]);
+			tour(arr,n,startingPlace+1,G);
+			swap(arr,arr[startingPlace],arr[i]);
+		}
+	}
 }
 
-/*
-matrix
-	std::vector<std::vector<EdgeWeight> > M;
-	int num_edges;
 
-list
-	std::vector<EList> edgeList;
-	int num_edges;
+EdgeWeight length(int* tour, Graph* G)
+{
+	EdgeWeight length = 0;
+	for (int i=0; i<G->size()-1; i++) {
+		length+= G->weight(tour[i], tour[i+1]);
+	}
+	length += G->weight(tour[G->size()-1], tour[0]);
+	return length;
+}
 
-Graph
-	typedef unsigned NodeID;
-	typedef double EdgeWeight;
-	typedef std::pair<NodeID, EdgeWeight> NWPair;
-
-*/
-
+void swap(int* arr, int place1, int place2)
+{
+	int dummy = arr[place1];
+	arr[place1] = arr[place2];
+	arr[place2] = dummy;
+}
