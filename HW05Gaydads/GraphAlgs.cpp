@@ -3,9 +3,8 @@
 #include <iostream>
 
 using namespace std;
-
-std::vector<NodeID> bestTour2;
 int* bestTour;
+std::vector<NodeID> bestTour2;
 double bestTourLength;
 bool bestTourChecked;
 /*
@@ -24,9 +23,6 @@ bool bestTourChecked;
  */
 std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G) {
 
-	//bestTourChecked = false;
-	//int size2 = G->size();
-	//std::vector<NodeID>bestTour2 (size2);
 	int size = G->size();
 	bestTour = new int[size];
 	for(int i=0; i<size; i++) {
@@ -34,97 +30,51 @@ std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G) {
 		bestTour2.push_back(i);
 	}
 
-
-	cout<<bestTour[0]<<endl;
-	bestTour[0] =1;
-	cout<<bestTour[0]<<endl;
-
 	bestTourLength = length(bestTour, G);
-	cout<<"BEFORE"<<endl;
-	cout<<bestTourLength<<endl;
-	for(int i =0; i<size; i++) {
-	cout<<bestTour[i];
-	}
+	bestTourChecked = true;
+	//Should start from space 1 to save time...
+	//012 same length as 120 and 201...
+	//no need to permutate the first node, keep starting node the same?
+	tour(bestTour, size, 1, G);
 
-	//bestTourChecked = true;
-	tour(bestTour, size, 0, G);
-
-	for(int j=0; j<size; j++) {
-				cout << bestTour[j];
-				if(j==size-1) {
-					cout<<"AFTER TOURED"<<endl;
-				}
-				}
-	//bestTourLength = length(bestTour, G);
-	std::vector<NodeID> nodes (size);
-	for(int i =0; i<size; i++) {
-		nodes[i] = bestTour[i];
-	}
-	//bestTourLength = length(bestTour,G);
-	
 	std::pair<std::vector<NodeID>,EdgeWeight> ret (bestTour2,bestTourLength);
-	cout<<"AFTER"<<endl;
-	cout<<bestTourLength<<endl;
-	for(int i =0; i<size; i++) {
-	cout<<bestTour[i];
-	}
 	return ret;
 }
 
+
+//Tour function adapted from class lecture
 void tour(int* arr, int n, int startingPlace, Graph* G) {
-	//int* arrTour= new int[n];
 	if((n - startingPlace) == 1) {
 		/* Sum up the length of the permutation
 		and see if it is smaller than the best seen
 		*/
-	double len1 = length(arr,G);
-	double len2 = length(bestTour,G);
+		if (length(arr,G) == bestTourLength) {
+			cout<<"same!"<<endl;
+		}
 		if(length(arr,G) < bestTourLength) {
 			bestTourLength = length(arr,G);
-			//bestTour = arr;
+			
 			int size = G->size();
 			for(int i=0; i<size; i++) {
-				bestTour[i] =  arr[i];
 				bestTour2[i] = arr[i];
-				//bestTour2[i] = bestTour[i];
-				//bestTour = arr;
-			}
-			//cout<<"change"<<endl;
-				for(int j=0; j<n; j++) {
-				cout << bestTour[j];
-				if(j==n-1) {
-					cout<<"CHANGE"<<bestTourLength<<endl;
-				}
-				}
-
 			}
 		}
+	}
 
 	else {
 		for(int i=startingPlace; i<n; i++) {
+			
 			swap(arr,startingPlace, i);
-
-
 			for(int j=0; j<n; j++) {
-				cout << bestTour[j];
-				if(j==n-1) {
+				cout<<arr[j];
+				if(j == n-1) {
 					cout<<endl;
 				}
-				}
-/*
-			for(int j=0; j<n; j++) {
-				cout << bestTour[j];
-				if(j==n-1) {
-					cout<<endl;
-				}
-				}*/
-				
-
+			}
 			tour(arr,n,startingPlace+1, G);
 			swap(arr,startingPlace, i);
 		}
 	}
-	//cout<<"BEST:"<<bestTourLength<<endl;
 }
 
 
@@ -133,9 +83,10 @@ EdgeWeight length(int* tour, Graph* G)
 	int size = G->size();
 	EdgeWeight length = 0;
 	for (int i=0; i<size-1; i++) {
-		//if(length>bestTourLength && bestTourChecked == true) {
-			//return length;
-		//}
+		//If the tour is too long already, stop
+		if(length >bestTourLength && bestTourChecked == true) {
+			return length;
+		}
 		length+= G->weight(tour[i], tour[i+1]);
 	}
 	length += G->weight(tour[size-1], tour[0]);

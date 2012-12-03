@@ -1,8 +1,7 @@
 #include "MatrixGraph.h"
 #include "Graph.h"
 
-MatrixGraph::MatrixGraph(unsigned num_nodes)
-{
+MatrixGraph::MatrixGraph(unsigned num_nodes) {
 
 	//std::vector<std::vector<EdgeWeight> >
 
@@ -14,7 +13,7 @@ MatrixGraph::MatrixGraph(unsigned num_nodes)
 	}
 }
 
-MatrixGraph::~MatrixGraph(){
+MatrixGraph::~MatrixGraph() {
 	//Not Needed
 }
 
@@ -27,8 +26,7 @@ MatrixGraph::~MatrixGraph(){
    *     There is no edge between u and v.
    *     weight > 0
    */
-void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight)
-{
+void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight) {
 	//Duplicates not a problem I think...
 	  //Preconditions...
 	  if (0 <= u < M.size()   && 0 <= v < M.size() && u!=v && weight >0) {
@@ -44,8 +42,7 @@ void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight)
    * Preconditions: 
    *     u and v are legal labels (i.e. 0 <= u < G.size(), 0 <= v < G.size())
    */
-EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const
-{
+EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const {
 	if (u >= 0 && u < M.size() && v >= 0 && v < M.size()) {
 		return M[u][v];	
 	}
@@ -60,8 +57,7 @@ EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const
    *
    * Preconditions: u is a legal label.
    */
-std::list<NWPair> MatrixGraph::getAdj(NodeID u) const
-{
+std::list<NWPair> MatrixGraph::getAdj(NodeID u) const {
 	//Precondition...
 	EList adj_list;
 
@@ -80,7 +76,7 @@ std::list<NWPair> MatrixGraph::getAdj(NodeID u) const
    *
    * Preconditions: u is a legal label;
    */
-unsigned MatrixGraph::degree(NodeID u) const{
+unsigned MatrixGraph::degree(NodeID u) const {
 	if (0 <= u < M.size() ){
 		return getAdj(u).size();
 	}
@@ -90,15 +86,13 @@ unsigned MatrixGraph::degree(NodeID u) const{
 /*
    * Return the number of nodes in the graph.
    */
-unsigned MatrixGraph::size() const
-{
+unsigned MatrixGraph::size() const {
 	return M.size();
 }
 
 /* 
    * Return the number of edges in the graph.
    */
-unsigned MatrixGraph::numEdges() const
-{
+unsigned MatrixGraph::numEdges() const {
 	return num_edges;
 }
