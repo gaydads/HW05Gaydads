@@ -4,6 +4,7 @@
 
 using namespace std;
 
+std::vector<NodeID> bestTour2;
 int* bestTour;
 double bestTourLength;
 bool bestTourChecked;
@@ -24,12 +25,19 @@ bool bestTourChecked;
 std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G) {
 
 	//bestTourChecked = false;
+	//int size2 = G->size();
+	//std::vector<NodeID>bestTour2 (size2);
 	int size = G->size();
-	bestTour = new int [size];
-
+	bestTour = new int[size];
 	for(int i=0; i<size; i++) {
 		bestTour[i] = i;
+		bestTour2.push_back(i);
 	}
+
+
+	cout<<bestTour[0]<<endl;
+	bestTour[0] =1;
+	cout<<bestTour[0]<<endl;
 
 	bestTourLength = length(bestTour, G);
 	cout<<"BEFORE"<<endl;
@@ -40,13 +48,21 @@ std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G) {
 
 	//bestTourChecked = true;
 	tour(bestTour, size, 0, G);
+
+	for(int j=0; j<size; j++) {
+				cout << bestTour[j];
+				if(j==size-1) {
+					cout<<"AFTER TOURED"<<endl;
+				}
+				}
 	//bestTourLength = length(bestTour, G);
 	std::vector<NodeID> nodes (size);
 	for(int i =0; i<size; i++) {
 		nodes[i] = bestTour[i];
 	}
 	//bestTourLength = length(bestTour,G);
-	std::pair<std::vector<NodeID>,EdgeWeight> ret (nodes,bestTourLength);
+	
+	std::pair<std::vector<NodeID>,EdgeWeight> ret (bestTour2,bestTourLength);
 	cout<<"AFTER"<<endl;
 	cout<<bestTourLength<<endl;
 	for(int i =0; i<size; i++) {
@@ -68,26 +84,36 @@ void tour(int* arr, int n, int startingPlace, Graph* G) {
 			//bestTour = arr;
 			int size = G->size();
 			for(int i=0; i<size; i++) {
-				cout<<"change"<<endl;
-				bestTour[i] = arr[i];
+				bestTour[i] =  arr[i];
+				bestTour2[i] = arr[i];
+				//bestTour2[i] = bestTour[i];
 				//bestTour = arr;
+			}
+			//cout<<"change"<<endl;
 				for(int j=0; j<n; j++) {
 				cout << bestTour[j];
 				if(j==n-1) {
-					cout<<endl;
+					cout<<"CHANGE"<<bestTourLength<<endl;
 				}
 				}
 
 			}
 		}
-	}
+
 	else {
 		for(int i=startingPlace; i<n; i++) {
 			swap(arr,startingPlace, i);
 
 
-			/*for(int j=0; j<n; j++) {
-				cout << arr[j];
+			for(int j=0; j<n; j++) {
+				cout << bestTour[j];
+				if(j==n-1) {
+					cout<<endl;
+				}
+				}
+/*
+			for(int j=0; j<n; j++) {
+				cout << bestTour[j];
 				if(j==n-1) {
 					cout<<endl;
 				}
