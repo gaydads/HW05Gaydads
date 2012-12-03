@@ -1,7 +1,12 @@
 #include "GraphAlgs.h"
+#include <fstream>
+#include <iostream>
+
+using namespace std;
 
 int* bestTour;
 double bestTourLength;
+bool bestTourChecked;
 /*
  * Solves the Traveling Salesperson Problem: finding the shortest cycle through a graph that 
  * vists every node exactly once (with exception of the first node, which is repeated as the 
@@ -16,40 +21,68 @@ double bestTourLength;
  *     G is undirected.
  *     Every pair of nodes u,v  (u != v) has an edge connecting the of weight > 0.
  */
-std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G)
-{
+std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G) {
+	//bestTourChecked = false;
 	bestTour = new int [G->size()];
+
 	for(int i=0; i<G->size(); i++) {
 		bestTour[i] = i;
 	}
 
-	tour(bestTour, G->size(), 0, G);
 	bestTourLength = length(bestTour, G);
+	cout<<"BEFORE"<<endl;
+	cout<<bestTourLength<<endl;
+	for(int i =0; i<G->size(); i++) {
+	cout<<bestTour[i];
+	}
+
+	//bestTourChecked = true;
+	tour(bestTour, G->size(), 0, G);
+	//bestTourLength = length(bestTour, G);
 	std::vector<NodeID> nodes (G->size());
 	for(int i =0; i<G->size(); i++) {
 		nodes[i] = bestTour[i];
 	}
+
 	std::pair<std::vector<NodeID>,EdgeWeight> ret (nodes,bestTourLength);
+	cout<<"AFTER"<<endl;
+	cout<<bestTourLength<<endl;
+	for(int i =0; i<G->size(); i++) {
+	cout<<bestTour[i];
+	}
 	return ret;
 }
 
-void tour(int* arr, int n, int startingPlace, Graph* G)
-{
-	if(G->size() - startingPlace == 1) {
+void tour(int* arr, int n, int startingPlace, Graph* G) {
+	if((n - startingPlace) == 1) {
 		/* Sum up the length of the permutation
 		and see if it is smaller than the best seen
 		*/
 		if(length(arr,G) < length(bestTour,G)) {
-			bestTour = arr;
+			bestTourLength = length(arr,G);
+			for(int i=0; i<G->size(); i++) {
+				bestTour[i] = arr[i];
+			}
 		}
 	}
 	else {
 		for(int i=startingPlace; i<n; i++) {
-			swap(arr,arr[startingPlace],arr[i]);
-			tour(arr,n,startingPlace+1,G);
-			swap(arr,arr[startingPlace],arr[i]);
+			swap(arr,startingPlace, i);
+
+
+			/*for(int j=0; j<n; j++) {
+				cout << arr[j];
+				if(j==n-1) {
+					cout<<endl;
+				}
+				}
+				*/
+
+			tour(arr,n,startingPlace+1, G);
+			swap(arr,startingPlace, i);
 		}
 	}
+	//cout<<"BEST:"<<bestTourLength<<endl;
 }
 
 
@@ -57,6 +90,9 @@ EdgeWeight length(int* tour, Graph* G)
 {
 	EdgeWeight length = 0;
 	for (int i=0; i<G->size()-1; i++) {
+		//if(length>bestTourLength && bestTourChecked == true) {
+			//return length;
+		//}
 		length+= G->weight(tour[i], tour[i+1]);
 	}
 	length += G->weight(tour[G->size()-1], tour[0]);
