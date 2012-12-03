@@ -48,9 +48,9 @@ void tour(int* arr, int n, int startingPlace, Graph* G) {
 		/* Sum up the length of the permutation
 		and see if it is smaller than the best seen
 		*/
-		if (length(arr,G) == bestTourLength) {
-			cout<<"same!"<<endl;
-		}
+		//if (length(arr,G) == bestTourLength) {
+			//cout<<"same!"<<endl;
+		//}
 		if(length(arr,G) < bestTourLength) {
 			bestTourLength = length(arr,G);
 			
@@ -65,12 +65,6 @@ void tour(int* arr, int n, int startingPlace, Graph* G) {
 		for(int i=startingPlace; i<n; i++) {
 			
 			swap(arr,startingPlace, i);
-			for(int j=0; j<n; j++) {
-				cout<<arr[j];
-				if(j == n-1) {
-					cout<<endl;
-				}
-			}
 			tour(arr,n,startingPlace+1, G);
 			swap(arr,startingPlace, i);
 		}
